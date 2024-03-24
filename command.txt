@@ -1,0 +1,60 @@
+def display_menu():
+    print("\n1. View To-Do List")
+    print("2. Add Task")
+    print("3. Complete Task")
+    print("4. Save and Quit")
+
+def view_todo_list(todo_list):
+    print("\nTO-DO LIST:")
+    if todo_list:
+        for idx, task in enumerate(todo_list, 1):
+            print(f"{idx}. {task}")
+    else:
+        print("No tasks.")
+
+def add_task(todo_list):
+    task = input("\nEnter task: ")
+    todo_list.append(task)
+    print("Task added.")
+
+def complete_task(todo_list):
+    view_todo_list(todo_list)
+    if todo_list:
+        try:
+            idx = int(input("\nEnter task number to complete: ")) - 1
+            del todo_list[idx]
+            print("Task completed.")
+        except (IndexError, ValueError):
+            print("Invalid task number.")
+
+def save_and_quit(todo_list, filename):
+    with open(filename, 'w') as file:
+        file.write('\n'.join(todo_list))
+    print("To-Do list saved. Quitting.")
+
+def main():
+    filename = "todo.txt"
+    try:
+        with open(filename, 'r') as file:
+            todo_list = file.read().splitlines()
+    except FileNotFoundError:
+        todo_list = []
+
+    while True:
+        display_menu()
+        choice = input("\nEnter command: ")
+        if choice == '1':
+            view_todo_list(todo_list)
+        elif choice == '2':
+            add_task(todo_list)
+        elif choice == '3':
+            complete_task(todo_list)
+        elif choice == '4':
+            save_and_quit(todo_list, filename)
+            break
+        else:
+            print("Invalid command. Please try again.")
+
+if __name__ == "__main__":
+    main()
+
